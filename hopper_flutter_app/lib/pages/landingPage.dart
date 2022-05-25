@@ -32,19 +32,21 @@ class _landingPageState extends State<landingPage> {
                         padding: EdgeInsets.symmetric(horizontal: padding),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
+                          children: [
                             BorderBox(
                               height: 50,
                               width: 50,
                               padding: EdgeInsets.all(8.0),
                               child: Icon(Icons.menu, color: PRIMARY_COLOR),
+                              callback: menu,
                             ),
                             BorderBox(
-                                height: 50,
-                                width: 50,
-                                padding: EdgeInsets.all(8.0),
-                                child:
-                                    Icon(Icons.settings, color: PRIMARY_COLOR))
+                              height: 50,
+                              width: 50,
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(Icons.settings, color: PRIMARY_COLOR),
+                              callback: settings,
+                            )
                           ],
                         )),
                     SizedBox(height: padding),
@@ -76,6 +78,10 @@ class _landingPageState extends State<landingPage> {
                   ],
                 ))));
   }
+
+  void menu() {}
+
+  void settings() {}
 }
 
 class ChoiceOption extends StatelessWidget {

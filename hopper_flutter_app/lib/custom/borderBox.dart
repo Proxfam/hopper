@@ -9,12 +9,14 @@ class BorderBox extends StatelessWidget {
       required this.child,
       required this.padding,
       required this.width,
-      required this.height})
+      required this.height,
+      required this.callback})
       : super(key: key);
 
   final Widget child;
   final EdgeInsets padding;
   final double width, height;
+  final void Function() callback;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +25,8 @@ class BorderBox extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
             color: COLOR_WHITE,
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(6),
             border: Border.all(color: COLOR_GREY.withAlpha(40), width: 2)),
-        padding: padding,
-        child: Center(child: child));
+        child: TextButton(onPressed: callback, child: Container(child: child)));
   }
 }
