@@ -16,6 +16,8 @@ class _landingPageState extends State<landingPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final ThemeData themeData = Theme.of(context);
+    final double padding = 25;
 
     return Scaffold(
         body: SafeArea(
@@ -23,9 +25,11 @@ class _landingPageState extends State<landingPage> {
                 width: size.width,
                 height: size.height,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: padding),
                     Padding(
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.symmetric(horizontal: padding),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: const [
@@ -42,8 +46,54 @@ class _landingPageState extends State<landingPage> {
                                 child:
                                     Icon(Icons.settings, color: PRIMARY_COLOR))
                           ],
-                        ))
+                        )),
+                    SizedBox(height: padding),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: padding),
+                        child:
+                            Text('City', style: themeData.textTheme.bodyText2)),
+                    const SizedBox(height: 10),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: padding),
+                        child: Text('San Francisco',
+                            style: themeData.textTheme.headline1)),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: padding),
+                        child: Divider(height: padding, color: COLOR_GREY)),
+                    const SizedBox(height: 10),
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                            children: [
+                          "Kane",
+                          "Lily",
+                          "Cam",
+                          "Sophie",
+                          "Emily",
+                          "Jack",
+                          "Will"
+                        ].map((e) => ChoiceOption(text: e)).toList()))
                   ],
                 ))));
+  }
+}
+
+class ChoiceOption extends StatelessWidget {
+  const ChoiceOption({Key? key, required this.text}) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData themedata = Theme.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: COLOR_GREY.withAlpha(25),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+      margin: EdgeInsets.only(left: 25),
+      child: Text(text, style: themedata.textTheme.headline5),
+    );
   }
 }
