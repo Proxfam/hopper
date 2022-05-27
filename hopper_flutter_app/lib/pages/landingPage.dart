@@ -40,6 +40,8 @@ class _landingPageState extends State<landingPage> {
                               child: Icon(Icons.menu, color: PRIMARY_COLOR),
                               callback: menu,
                             ),
+                            Text("Hopper",
+                                style: themeData.textTheme.headline1),
                             BorderBox(
                               height: 50,
                               width: 50,

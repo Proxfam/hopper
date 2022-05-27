@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hopper_flutter_app/pages/landingPage.dart';
+import 'package:hopper_flutter_app/pages/testingPage.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
 void main() {
@@ -24,6 +25,6 @@ class mainPage extends StatelessWidget {
           fontFamily: "Montserrat ",
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: const landingPage());
+        home: const testingPage());
   }
 }
