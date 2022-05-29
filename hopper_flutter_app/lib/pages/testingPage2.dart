@@ -113,7 +113,7 @@ class RouteCard extends StatelessWidget {
                       height: 75,
                       width: 75,
                       scale: 1,
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.fill,
                     ),
                   ),
                   const Spacer(),
