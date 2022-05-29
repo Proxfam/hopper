@@ -10,10 +10,10 @@ class testingPage2 extends StatefulWidget {
   const testingPage2({Key? key}) : super(key: key);
 
   @override
-  State<testingPage2> createState() => _testingPageState();
+  State<testingPage2> createState() => _testingPage2State();
 }
 
-class _testingPageState extends State<testingPage2> {
+class _testingPage2State extends State<testingPage2> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -26,50 +26,59 @@ class _testingPageState extends State<testingPage2> {
             child: SizedBox(
                 width: size.width,
                 height: size.height,
-                child: Container(
-                    child: Stack(children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
+                child: Stack(
+                  children: [
+                    Expanded(
+                        child: Container(
+                      decoration: const BoxDecoration(color: COLOR_GREY),
+                    )),
+                    Positioned(
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                padding, 15, padding, 0),
+                            child: RouteCard(itemData: RE_DATA[0]))),
+                    Positioned(
+                      top: 0,
+                      child: Container(
                           padding:
                               const EdgeInsets.symmetric(vertical: padding),
                           decoration: BoxDecoration(
+                              boxShadow: const <BoxShadow>[
+                                BoxShadow(color: COLOR_DARK_BLUE)
+                              ],
                               borderRadius: BorderRadius.circular(8.0)),
                           child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: padding),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  BorderBox(
+                                  Expanded(
+                                      child: BorderBox(
                                     height: 50,
                                     width: 50,
                                     padding: const EdgeInsets.all(8.0),
                                     callback: menu,
                                     child: const Icon(Icons.menu,
                                         color: PRIMARY_COLOR),
-                                  ),
-                                  Text("Hopper",
-                                      style: themeData.textTheme.headline1),
-                                  BorderBox(
+                                  )),
+                                  Expanded(
+                                      child: Text("Hopper",
+                                          style:
+                                              themeData.textTheme.headline1)),
+                                  Expanded(
+                                      child: BorderBox(
                                     height: 50,
                                     width: 50,
                                     padding: const EdgeInsets.all(8.0),
                                     callback: settings,
                                     child: const Icon(Icons.settings,
                                         color: PRIMARY_COLOR),
-                                  )
+                                  ))
                                 ],
                               ))),
-                      Expanded(
-                        child: Container(
-                            decoration: const BoxDecoration(color: COLOR_GREY)),
-                      )
-                    ],
-                  )
-                ])))));
+                    )
+                  ],
+                ))));
   }
 
   void menu() {}
@@ -88,8 +97,7 @@ class RouteCard extends StatelessWidget {
 
     return Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.grey.shade300),
+            borderRadius: BorderRadius.circular(8), color: COLOR_WHITE),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
