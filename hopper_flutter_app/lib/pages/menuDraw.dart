@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hopper_flutter_app/pages/login/loginPage.dart';
 import 'package:hopper_flutter_app/pages/profilePage.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
@@ -30,8 +31,13 @@ class menuDraw extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (value) => const profilePage()))
+                            builder: (context) => const profilePage()))
                   }),
+          ListTile(
+            leading: const Icon(Icons.input),
+            title: const Text('New Ride'),
+            onTap: () => Navigator.of(context).pop(),
+          ),
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
@@ -45,7 +51,10 @@ class menuDraw extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const loginPage()))
+            },
           ),
           ListTile(
               leading: const Icon(Icons.info),
