@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hopper_flutter_app/custom/loginAuth.dart';
+import 'package:hopper_flutter_app/pages/landingPage.dart';
 import 'package:hopper_flutter_app/pages/login/createAccountPage.dart';
 import 'package:hopper_flutter_app/pages/menuDraw.dart';
 import 'package:hopper_flutter_app/pages/testingPage3.dart';
@@ -17,12 +18,30 @@ class loginPage extends StatefulWidget {
 
 class _loginPageState extends State<loginPage> {
   @override
+  void initState() {
+    super.initState();
+    signInMemory().then((value) {
+      if (value) {
+        Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => landingPage(),
+                transitionDuration: const Duration(seconds: 0)));
+      } else {
+        print('not signed in');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25;
+    const double padding = 25;
 
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
+
+    bool enableButton = true;
 
     return Scaffold(
       body: Container(
@@ -82,7 +101,7 @@ class _loginPageState extends State<loginPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) =>
-                                          const testingPage3())));
+                                          const landingPage())));
                             }
                           });
                         }),

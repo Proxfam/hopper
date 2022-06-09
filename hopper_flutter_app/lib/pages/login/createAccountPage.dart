@@ -27,7 +27,7 @@ class _createAccountPageState extends State<createAccountPage> {
     FnameController.text = 'Kane';
     LnameController.text = 'Viggers';
     emailController.text = 'kane.viggers@gmail.com';
-    passwordController.text = 'tomtom11tomtom11';
+    passwordController.text = 'password';
 
     return Scaffold(
         appBar: AppBar(
@@ -56,7 +56,7 @@ class _createAccountPageState extends State<createAccountPage> {
                         prefixIcon: Icon(Icons.person),
                         labelText: "First name"),
                   )),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Flexible(
                       child: TextField(
                           controller: LnameController,
@@ -96,7 +96,8 @@ class _createAccountPageState extends State<createAccountPage> {
                                   FnameController,
                                   LnameController,
                                   emailController,
-                                  passwordController)
+                                  passwordController,
+                                  confirmPasswordController)
                               .then((value) {
                             if (value != null && value) {
                               setState(() {

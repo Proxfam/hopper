@@ -1,0 +1,11 @@
+version: "Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)"
+options: "43dfc9ee3fa8a843c7983d185d6508f3c78529e9172c8f350ef8c9180bf413d9"
+build_start_time: [1653966056, 121903896]
+build_end_time: [1653966056, 552312850]
+inputs:
+  ? "/Users/kaneviggers/Library/Mobile Documents/com~apple~CloudDocs/Repos/Hopper GH/Hopper/hopper_flutter_app/macos/Flutter/GeneratedPluginRegistrant.swift"
+  : [1653966045, 148949623]
+  ? "/Users/kaneviggers/Library/Mobile Documents/com~apple~CloudDocs/Repos/Hopper GH/Hopper/hopper_flutter_app/macos/Runner/AppDelegate.swift"
+  : [1650248530, 0]
+  ? "/Users/kaneviggers/Library/Mobile Documents/com~apple~CloudDocs/Repos/Hopper GH/Hopper/hopper_flutter_app/macos/Runner/MainFlutterWindow.swift"
+  : [1650248530, 0]

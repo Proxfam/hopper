@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:hopper_flutter_app/pages/menuDraw.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
 import '../custom/borderBox.dart';
@@ -20,6 +21,8 @@ class _landingPageState extends State<landingPage> {
     final double padding = 25;
 
     return Scaffold(
+        appBar: AppBar(title: Text("hello")),
+        drawer: menuDraw(),
         body: SafeArea(
             child: SizedBox(
                 width: size.width,

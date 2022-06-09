@@ -4,16 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:hopper_flutter_app/pages/testingPage3.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
+final FirebaseAuth _auth = _auth;
+
+Future<bool> signInMemory() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  return user == null ? false : true;
+}
 
 Future<bool> signInWithEmail(BuildContext context, TextEditingController email,
     TextEditingController password) async {
   void verifyEmail() async {
-    //Still doesn't want to send me an email
-    await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text("Verification email sent")));
-    print('sent');
+    User user = (_auth.currentUser!);
+    user.reload();
+    user.sendEmailVerification();
   }
 
   try {
@@ -58,10 +61,13 @@ Future<dynamic> createAccountWithEmail(
     TextEditingController firstName,
     TextEditingController lastName,
     TextEditingController email,
-    TextEditingController password) async {
+    TextEditingController password,
+    TextEditingController confPassword) async {
   try {
     if (firstName.text == "" || lastName.text == "") {
       throw FirebaseAuthException(code: 'invalid-name');
+    } else if (confPassword.text != password.text) {
+      throw FirebaseAuthException(code: 'password-does-not-match');
     }
 
     final credentials = await FirebaseAuth.instance
@@ -72,7 +78,6 @@ Future<dynamic> createAccountWithEmail(
         .showSnackBar(const SnackBar(content: Text("Account created")));
     return true;
   } on FirebaseAuthException catch (e) {
-    Navigator.pop(context);
     switch (e.code) {
       case 'weak-password':
         ScaffoldMessenger.of(context)
@@ -93,6 +98,10 @@ Future<dynamic> createAccountWithEmail(
       case 'email-already-in-use':
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Email already in use")));
+        break;
+      case 'password-does-not-match':
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Passwords do not match")));
         break;
       default:
         ScaffoldMessenger.of(context)
