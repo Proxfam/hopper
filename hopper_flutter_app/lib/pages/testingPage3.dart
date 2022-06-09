@@ -212,14 +212,6 @@ class _testingPage3State extends State<testingPage3> {
         tilt: 45);
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Hopper",
-            style: themeData.textTheme.headline1,
-          ),
-          backgroundColor: Colors.white,
-          foregroundColor: PRIMARY_COLOR,
-        ),
         drawer: menuDraw(),
         key: _key,
         body: SafeArea(
@@ -254,32 +246,32 @@ class _testingPage3State extends State<testingPage3> {
                       right: 0,
                       left: 0,
                       child: Column(children: <Widget>[
-                        // Container(
-                        //     decoration: const BoxDecoration(
-                        //         borderRadius: BorderRadius.only(
-                        //             bottomLeft: Radius.circular(8.0),
-                        //             bottomRight: Radius.circular(8.0)),
-                        //         color: COLOR_WHITE),
-                        //     child: Padding(
-                        //         padding: const EdgeInsets.all(padding),
-                        //         child: Row(
-                        //           crossAxisAlignment: CrossAxisAlignment.center,
-                        //           mainAxisAlignment:
-                        //               MainAxisAlignment.spaceBetween,
-                        //           children: <Widget>[
-                        //             BorderBox(
-                        //               height: 50,
-                        //               width: 50,
-                        //               padding: const EdgeInsets.all(8.0),
-                        //               callback: menu,
-                        //               child: const Icon(Icons.menu,
-                        //                   color: PRIMARY_COLOR),
-                        //             ),
-                        //             Text("Hopper",
-                        //                 style: themeData.textTheme.headline1),
-                        //             const SizedBox(height: 50, width: 50)
-                        //           ],
-                        //         ))),
+                        Container(
+                            decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(8.0),
+                                    bottomRight: Radius.circular(8.0)),
+                                color: COLOR_WHITE),
+                            child: Padding(
+                                padding: const EdgeInsets.all(padding),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    BorderBox(
+                                      height: 50,
+                                      width: 50,
+                                      padding: const EdgeInsets.all(8.0),
+                                      callback: menu,
+                                      child: const Icon(Icons.menu,
+                                          color: PRIMARY_COLOR),
+                                    ),
+                                    Text("Hopper",
+                                        style: themeData.textTheme.headline1),
+                                    const SizedBox(height: 50, width: 50)
+                                  ],
+                                ))),
                         Padding(
                             padding: const EdgeInsets.fromLTRB(
                                 padding, 10, padding, 0),

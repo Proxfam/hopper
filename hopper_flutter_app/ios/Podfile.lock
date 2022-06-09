@@ -1,4 +1,5 @@
 PODS:
+<<<<<<< HEAD
   - abseil/algorithm (1.20211102.0):
     - abseil/algorithm/algorithm (= 1.20211102.0)
     - abseil/algorithm/container (= 1.20211102.0)
@@ -658,10 +659,13 @@ PODS:
     - "gRPC-C++ (~> 1.44.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30908.0)
+=======
+>>>>>>> parent of 4315871 (31/05/22 1)
   - Flutter (1.0.0)
   - google_maps_flutter (0.0.1):
     - Flutter
     - GoogleMaps
+<<<<<<< HEAD
   - GoogleDataTransport (9.1.4):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
@@ -745,26 +749,31 @@ PODS:
   - Libuv-gRPC/Implementation (0.0.10):
     - Libuv-gRPC/Interface (= 0.0.10)
   - Libuv-gRPC/Interface (0.0.10)
+=======
+  - GoogleMaps (4.1.0):
+    - GoogleMaps/Maps (= 4.1.0)
+  - GoogleMaps/Base (4.1.0)
+  - GoogleMaps/Maps (4.1.0):
+    - GoogleMaps/Base
+>>>>>>> parent of 4315871 (31/05/22 1)
   - location (0.0.1):
     - Flutter
-  - nanopb (2.30908.0):
-    - nanopb/decode (= 2.30908.0)
-    - nanopb/encode (= 2.30908.0)
-  - nanopb/decode (2.30908.0)
-  - nanopb/encode (2.30908.0)
-  - PromisesObjC (2.1.0)
 
 DEPENDENCIES:
+<<<<<<< HEAD
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
+=======
+>>>>>>> parent of 4315871 (31/05/22 1)
   - Flutter (from `Flutter`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - location (from `.symlinks/plugins/location/ios`)
 
 SPEC REPOS:
   trunk:
+<<<<<<< HEAD
     - abseil
     - BoringSSL-GRPC
     - Firebase
@@ -793,6 +802,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_database:
     :path: ".symlinks/plugins/firebase_database/ios"
+=======
+    - GoogleMaps
+
+EXTERNAL SOURCES:
+>>>>>>> parent of 4315871 (31/05/22 1)
   Flutter:
     :path: Flutter
   google_maps_flutter:
@@ -801,6 +815,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/location/ios"
 
 SPEC CHECKSUMS:
+<<<<<<< HEAD
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   cloud_firestore: 936969669b510f2affd43583582d7b117c5f08d1
@@ -823,10 +838,17 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
+=======
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  google_maps_flutter: c59fc576c0d0c7f4dc4bd63832c862d22d5a7c6d
+  GoogleMaps: 008e2c80e38605b56b560e8deb73d4194ff30bef
+>>>>>>> parent of 4315871 (31/05/22 1)
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
-  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
 
+<<<<<<< HEAD
 PODFILE CHECKSUM: 95b267afc1f43e02266e02ffa138a5252d05b1e8
+=======
+PODFILE CHECKSUM: a75497545d4391e2d394c3668e20cfb1c2bbd4aa
+>>>>>>> parent of 4315871 (31/05/22 1)
 
 COCOAPODS: 1.11.3

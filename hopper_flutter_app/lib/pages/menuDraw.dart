@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:hopper_flutter_app/pages/login/loginPage.dart';
 import 'package:hopper_flutter_app/pages/newRide.dart';
+=======
+>>>>>>> parent of 4315871 (31/05/22 1)
 import 'package:hopper_flutter_app/pages/profilePage.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
@@ -33,9 +36,10 @@ class menuDraw extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const profilePage()))
+                            builder: (value) => const profilePage()))
                   }),
           ListTile(
+<<<<<<< HEAD
               leading: const Icon(Icons.input),
               title: const Text('New Ride'),
               onTap: () => {
@@ -45,6 +49,8 @@ class menuDraw extends StatelessWidget {
                             builder: (context) => const newRide()))
                   }),
           ListTile(
+=======
+>>>>>>> parent of 4315871 (31/05/22 1)
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
             onTap: () => {Navigator.of(context).pop()},
@@ -57,11 +63,15 @@ class menuDraw extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
+<<<<<<< HEAD
             onTap: () {
               FirebaseAuth.instance.signOut();
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const loginPage()));
             },
+=======
+            onTap: () => {Navigator.of(context).pop()},
+>>>>>>> parent of 4315871 (31/05/22 1)
           ),
           ListTile(
               leading: const Icon(Icons.info),
