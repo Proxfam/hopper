@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hopper_flutter_app/custom/loginAuth.dart';
+import 'package:hopper_flutter_app/pages/landingPage.dart';
 import 'package:hopper_flutter_app/pages/login/createAccountPage.dart';
 import 'package:hopper_flutter_app/pages/menuDraw.dart';
 import 'package:hopper_flutter_app/pages/testingPage3.dart';
@@ -82,7 +83,7 @@ class _loginPageState extends State<loginPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) =>
-                                          const testingPage3())));
+                                          const landingPage())));
                             }
                           });
                         }),
