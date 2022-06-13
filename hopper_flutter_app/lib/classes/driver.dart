@@ -40,8 +40,8 @@ Driver createDriver(record) {
       record['literPer100km']);
 
   Set.from(record['reviews']).forEach((element) {
-    driver.reviews
-        .add(Review(element['uid'], element['rating'], element['body']));
+    driver.reviews.add(
+        Review(element['uid'], element['rating'], element['body'], driver));
   });
 
   return driver;

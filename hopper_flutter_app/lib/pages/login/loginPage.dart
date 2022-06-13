@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -7,6 +8,8 @@ import 'package:hopper_flutter_app/pages/landingPage.dart';
 import 'package:hopper_flutter_app/pages/login/createAccountPage.dart';
 import 'package:hopper_flutter_app/pages/menuDraw.dart';
 import 'package:hopper_flutter_app/pages/testingPage3.dart';
+import 'package:hopper_flutter_app/pages/testingPage4.dart';
+import 'package:hopper_flutter_app/popups/createReview.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
 class loginPage extends StatefulWidget {
@@ -20,14 +23,14 @@ class _loginPageState extends State<loginPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25;
+    const double padding = 25;
 
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
 
     return Scaffold(
       body: Container(
-          padding: EdgeInsets.symmetric(horizontal: padding),
+          padding: const EdgeInsets.symmetric(horizontal: padding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -82,8 +85,7 @@ class _loginPageState extends State<loginPage> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: ((context) =>
-                                          const landingPage())));
+                                      builder: ((context) => MapSample())));
                             }
                           });
                         }),
@@ -103,5 +105,19 @@ class _loginPageState extends State<loginPage> {
             ],
           )),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (FirebaseAuth.instance.currentUser != null) {
+        Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) => MapSample(),
+                transitionDuration: const Duration(seconds: 0)));
+      }
+    });
   }
 }
