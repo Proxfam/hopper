@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hopper_flutter_app/custom/database.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -32,10 +33,10 @@ class MapSampleState extends State<MapSample> {
           _controller.complete(controller);
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: const Text('To the lake!'),
-        icon: const Icon(Icons.directions_boat),
+      floatingActionButton: const FloatingActionButton.extended(
+        onPressed: TESTrideClass,
+        label: Text('Test database'),
+        icon: Icon(Icons.data_array),
       ),
     );
   }

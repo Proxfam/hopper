@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -5,6 +7,8 @@ import 'package:location/location.dart';
 import '../classes/driver.dart';
 import '../classes/review.dart';
 import '../classes/ride.dart';
+
+import 'dart:developer' as dartDev;
 
 void TESTwriteToFirestore() async {
   Driver newDriver =
@@ -29,29 +33,20 @@ void TESTwriteToFirestore() async {
           print('DocumentSnapshot added with ID: ${doc.id}'));
 }
 
-void TESTreadFromFirestore() async {
-  //TESTwriteToFirestore();
-
-  await FirebaseFirestore.instance.collection('drivers').get().then((doc) {
-    //print(doc.docs[0].data() as Map<String, dynamic>);
-
-    Driver newDriver = createDriver(doc.docs[0]);
-    print(newDriver.reviews.toList()[0].body);
-  });
-}
-
 void TESTrideClass() async {
-  await FirebaseFirestore.instance
-      .collection('drivers')
-      .get()
-      .then((doc) async {
-    Ride newRide = Ride(
-        createDriver(doc.docs[0]),
-        const LatLng(-45.031196115254865, 168.6629237476333),
-        const LatLng(-45.021817784071686, 168.70084353200264));
-
-    await newRide.createRoute().then((value) {
-      FirebaseFirestore.instance.collection("rides").add(newRide.toJson());
+  await FirebaseFirestore.instance.collection('drivers').get().then((doc) {
+    Future<Driver> driver = downloadDriverByUID(doc.docs[0].data()['uid']);
+    driver.then((value) {
+      print(value.runtimeType);
+      if (value.runtimeType == Driver) {
+        Ride newRide = Ride(
+            value,
+            const LatLng(-45.031196115254865, 168.6629237476333),
+            const LatLng(-45.021817784071686, 168.70084353200264));
+        newRide.uploadToDb();
+      } else {
+        throw Exception('Internal code error');
+      }
     });
   });
 }
