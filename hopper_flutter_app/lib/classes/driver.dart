@@ -10,26 +10,22 @@ import 'package:hopper_flutter_app/classes/review.dart';
 class Driver {
   var docref;
   String uid;
-  double rating;
+  late double rating;
   Set reviews = <Review>{};
   String vehicle;
   double literPer100km;
 
-  Driver(this.uid, this.rating, this.vehicle, this.literPer100km);
+  Driver(this.uid, this.vehicle, this.literPer100km, [this.rating = 0]);
 
-  void uploadToDb() {
-    FirebaseFirestore.instance
+  void updateDriver() async {
+    await FirebaseFirestore.instance
         .collection('drivers')
-        .add(toJson())
-        .then((value) => docref = value);
+        .doc(docref)
+        .update(toJson());
   }
 
-  void fetchFromDb() async {
-    var query = await FirebaseFirestore.instance
-        .collection('drivers')
-        // .where('uid', isEqualTo: uid.toString())
-        .get()
-        .then((value) {});
+  void deleteDriver() async {
+    await FirebaseFirestore.instance.collection('drivers').doc(docref).delete();
   }
 
   void addReview(Review review) {
@@ -53,8 +49,8 @@ class Driver {
 }
 
 Driver _createDriver(record) {
-  Driver driver = Driver(record['uid'], record['rating'], record['vehicle'],
-      record['literPer100km']);
+  Driver driver = Driver(record['uid'], record['vehicle'],
+      record['literPer100km'], record['rating']);
 
   Set.from(record['reviews']).forEach((element) {
     driver.reviews.add(
@@ -67,7 +63,7 @@ Driver _createDriver(record) {
 Future<Driver> downloadDriverByUID(String uid) {
   return FirebaseFirestore.instance
       .collection('drivers')
-      .where('uid', isEqualTo: uid.toString())
+      .where('uid', isEqualTo: uid)
       .get()
       .then((value) {
     if (value.docs.isEmpty) {
@@ -79,5 +75,16 @@ Future<Driver> downloadDriverByUID(String uid) {
       driver.docref = value.docs[0].reference;
       return driver;
     }
+  });
+}
+
+Future<Driver> uploadDriver(String uid, String vehicle, double literPer100km) {
+  Driver driver = Driver(uid, vehicle, literPer100km);
+  return FirebaseFirestore.instance
+      .collection('drivers')
+      .add(driver.toJson())
+      .then((value) {
+    driver.docref = value;
+    return driver;
   });
 }

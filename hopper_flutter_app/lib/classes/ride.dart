@@ -24,7 +24,7 @@ class Ride {
 
   Map<String, dynamic> toJson() {
     return {
-      'driver': driver.docref.id,
+      'driver': driver.uid,
       'distance': distance,
       'origin': origin.toJson(),
       'destination': destination.toJson(),
@@ -51,6 +51,36 @@ double _calculateDistance(lat1, lon1, lat2, lon2) {
       cos((lat2 - lat1) * p) / 2 +
       cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
   return 12742 * asin(sqrt(a));
+}
+
+Future<Ride> _createRide(Map<String, dynamic> record, List collections) async {
+  Driver driver = await downloadDriverByUID(record['driver']);
+  Ride ride = Ride(driver, LatLng(record['origin'][0], record['origin'][1]),
+      LatLng(record['destination'][0], record['destination'][1]));
+  ride.distance = record['distance'];
+  collections.forEach((element) {
+    ride.coords.add(LatLng(element.data()['lat'], element.data()['lng']));
+  });
+  return ride;
+}
+
+Future<Ride> downloadRideByUID(String uid) async {
+  var query = await FirebaseFirestore.instance
+      .collection('rides')
+      .where('driver', isEqualTo: uid)
+      .get();
+  if (query.docs.isEmpty) {
+    throw Exception("None found");
+  } else if (query.docs.length > 1) {
+    throw Exception("More than one found by UID");
+  } else {
+    var collections = await FirebaseFirestore.instance
+        .collection('rides')
+        .doc(query.docs[0].id)
+        .collection('coords')
+        .get();
+    return _createRide(query.docs[0].data(), collections.docs);
+  }
 }
 
 Future<Ride> uploadRide(driver, origin, destination) async {

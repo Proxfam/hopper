@@ -34,7 +34,7 @@ class MapSampleState extends State<MapSample> {
         },
       ),
       floatingActionButton: const FloatingActionButton.extended(
-        onPressed: TESTrideClass,
+        onPressed: TESTaddRider,
         label: Text('Test database'),
         icon: Icon(Icons.data_array),
       ),
