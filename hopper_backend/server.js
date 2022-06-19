@@ -14,9 +14,24 @@ initializeApp({
 
 const db = getFirestore();
 
-app.get('/',async (req,res) => {
-    res.send('lmao');
+app.get('/api/addRiderToRide', async (req,res) => {
+    console.log(req.query);
     var query = await db.collection('rides').get();
+    var ride;
+    var rideCoords;
+    query.docs.forEach(value => {
+        if (value.data()['driver'] == req.query['driver']) {
+            console.log('here');
+            ride = value;
+            return;
+        }
+    })
+    var query = await db.collection(`rides/${ride.id}/coords`).get();
+    rideCoords = query.docs;
+    console.log(rideCoords);
+    console.log(ride);
+    res.json(ride);
+    return;
     var response = client.directions({
         params: {
             origin: '12 alexander place, arrowtown',
