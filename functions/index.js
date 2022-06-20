@@ -17,29 +17,18 @@ initializeApp({
 
 const db = getFirestore();
 
-app.get('/',(req,res) => {
-    res.send('route');
-})
-
-app.get('/api/addRiderToRide', async (req,res) => {
-    console.log(req.query);
+exports.addRiderToRide = async (req, res) => {
     var query = await db.collection('rides').get();
     var ride;
     var rideCoords;
-    query.docs.forEach(value => {
-        if (value.data()['driver'] == req.query['driver']) {
-            console.log('here');
-            ride = value;
-            return;
+    for(doc in query.docs) {
+        if (query.docs[doc].data()['driver'] == req.query['driver']) {
+            ride = query.docs[doc];
         }
-    })
-    var query = await db.collection(`rides/${ride.id}/coords`).get();
+    }
+    var query = await db.collection(`rides/${ride['id']}/coords`).get();
     rideCoords = query.docs;
-    console.log(rideCoords);
-    console.log(ride);
-    res.json(ride);
-    return;
-    var response = client.directions({
+    var response = await client.directions({
         params: {
             origin: '12 alexander place, arrowtown',
             destination: '47 ferry hill drive, quail rise',
@@ -53,13 +42,7 @@ app.get('/api/addRiderToRide', async (req,res) => {
             },
             key: 'AIzaSyBDPS7SYYqG6VlmkDe8hXmgmr4Jc0qm4bo'
         },
-    }).then((value) => {
-        console.log(value.data.routes[0]);
     })
-})
+};
 
-exports.app = functions.https.onRequest(app);
-
-app.listen(port, () => {
-    console.log('Running');
-})
+exports.addRiderToRide = functions.https.onRequest(this.addRiderToRide);

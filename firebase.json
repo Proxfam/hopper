@@ -1,16 +1,30 @@
 {
   "hosting": {
     "public": "hopper_backend/public",
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "helloWorld"
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
     ]
+  },
+  "functions": {
+    "source": "functions"
+  },
+  "emulators": {
+    "functions": {
+      "port": 3005
+    },
+    "ui": {
+      "enabled": true
+    },
+    "hosting": {
+      "port": 5005
+    }
   }
 }
