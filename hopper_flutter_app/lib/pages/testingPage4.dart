@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:developer' as dev;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hopper_flutter_app/custom/database.dart';
+import 'package:hopper_flutter_app/custom/passbase.dart';
+import 'package:passbase_flutter/passbase_flutter.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -33,11 +37,23 @@ class MapSampleState extends State<MapSample> {
           _controller.complete(controller);
         },
       ),
-      floatingActionButton: const FloatingActionButton.extended(
-        onPressed: TESTaddRider,
-        label: Text('Test database'),
-        icon: Icon(Icons.data_array),
-      ),
+      floatingActionButton: PassbaseButton(
+          onSubmitted: (identityAccessKey) {
+            verifySubmitted(identityAccessKey);
+          },
+          onFinish: (authenticationKey) {
+            verifyComplete(authenticationKey);
+          },
+          onError: (error) {
+            verifyError(error);
+          },
+          width: 256,
+          height: 55),
+      // floatingActionButton: const FloatingActionButton.extended(
+      //   onPressed: TESTaddRider,
+      //   label: Text('Test database'),
+      //   icon: Icon(Icons.data_array),
+      // ),
     );
   }
 

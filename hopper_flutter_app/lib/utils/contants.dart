@@ -7,6 +7,8 @@ const COLOR_WHITE = Colors.white;
 const COLOR_DARK_BLUE = Color.fromRGBO(20, 25, 45, 1.0);
 
 const TextTheme TEXT_THEME_DEFAULT = TextTheme(
+    headlineLarge: TextStyle(
+        color: Colors.white, fontWeight: FontWeight.w700, fontSize: 32),
     headline1: TextStyle(
         color: PRIMARY_COLOR, fontWeight: FontWeight.w700, fontSize: 26),
     headline2: TextStyle(

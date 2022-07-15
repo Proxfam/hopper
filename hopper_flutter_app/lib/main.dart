@@ -1,20 +1,30 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hopper_flutter_app/custom/database.dart';
-import 'package:hopper_flutter_app/pages/landingPage.dart';
+import 'package:hopper_flutter_app/pages/accountPages/accountPage.dart';
+import 'package:hopper_flutter_app/pages/accountPages/accountSettings.dart';
+import 'package:hopper_flutter_app/pages/home/welcomePage.dart';
+import 'package:hopper_flutter_app/pages/identityAuth.dart';
 import 'package:hopper_flutter_app/pages/login/loginPage.dart';
-import 'package:hopper_flutter_app/pages/testingPage.dart';
-import 'package:hopper_flutter_app/pages/testingPage2.dart';
-import 'package:hopper_flutter_app/pages/testingPage3.dart';
+import 'package:hopper_flutter_app/pages/testingPage5.dart';
+import 'package:hopper_flutter_app/pages/testingPage6.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
+import 'package:passbase_flutter/passbase_flutter.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //TESTrideClass();
+  PassbaseSDK.initialize(
+      publishableApiKey:
+          "O8vmEcyTIdE64fc5PxCFvPX1UB46UXWhFlVLizREkUdAXuHZNfAGs26AtgdRjwPL");
+  Stripe.publishableKey =
+      "pk_test_51LFA2lJj1tNJdnFypx1Np4KpST982pUFPA9OlmFsbAuQTgrZYxa4IBLlPR71KYcem9FyjQdWx7rQSNpTCFUGc5nv00s22o35tQ";
   runApp(const mainPage());
 }
 
@@ -35,6 +45,6 @@ class mainPage extends StatelessWidget {
           fontFamily: "Montserrat",
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: const loginPage());
+        home: const welcomePage());
   }
 }

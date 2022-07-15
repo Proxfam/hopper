@@ -61,3 +61,27 @@ stops = Set<LocationData>
 
 downloadRideByUID(String);
 uploadRide(Driver, LatLng, LatLng)
+
+## List of things to do
+
+Complete backend setup
+
+Communitcation between app and backend
+
+Intergrate Transportation and Logistics apis for routes
+
+Develop all possible methods eg. addRiderToRide, deleteRide, createDriver, addReview, calcutlateRating ect
+
+Integrate google maps into flutter correctly
+
+Design UI interface
+
+Iron out bugs and prepare for prototyping
+
+--Present prototype
+
+Work on configuration options within routes
+
+Communicate between driver and rider
+
+Live updates to Rider of Drivers position

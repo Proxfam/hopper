@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hopper_flutter_app/pages/testingPage3.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;

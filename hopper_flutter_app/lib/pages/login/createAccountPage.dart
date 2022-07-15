@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hopper_flutter_app/custom/loginAuth.dart';
-import 'package:hopper_flutter_app/pages/testingPage3.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
 class createAccountPage extends StatefulWidget {
@@ -31,23 +30,18 @@ class _createAccountPageState extends State<createAccountPage> {
 
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.white,
-            foregroundColor: PRIMARY_COLOR,
-            title: const Text("Hopper"),
-            titleTextStyle: themeData.textTheme.headline1),
+          title:
+              Text("Create account", style: themeData.textTheme.headlineMedium),
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.grey,
+          shadowColor: Colors.transparent,
+        ),
         body: Container(
             padding: const EdgeInsets.symmetric(horizontal: padding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Text(
-                    "Create account",
-                    style: themeData.textTheme.headline1,
-                  ),
-                ),
                 Row(children: [
                   Flexible(
                       child: TextField(
@@ -56,7 +50,7 @@ class _createAccountPageState extends State<createAccountPage> {
                         prefixIcon: Icon(Icons.person),
                         labelText: "First name"),
                   )),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Flexible(
                       child: TextField(
                           controller: LnameController,

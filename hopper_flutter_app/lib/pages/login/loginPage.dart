@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hopper_flutter_app/custom/loginAuth.dart';
-import 'package:hopper_flutter_app/pages/landingPage.dart';
+import 'package:hopper_flutter_app/pages/accountPages/accountPage.dart';
 import 'package:hopper_flutter_app/pages/login/createAccountPage.dart';
 import 'package:hopper_flutter_app/pages/menuDraw.dart';
-import 'package:hopper_flutter_app/pages/testingPage3.dart';
 import 'package:hopper_flutter_app/pages/testingPage4.dart';
-import 'package:hopper_flutter_app/popups/createReview.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
 class loginPage extends StatefulWidget {
@@ -27,6 +25,17 @@ class _loginPageState extends State<loginPage> {
 
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
+
+    if (FirebaseAuth.instance.currentUser != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (context, animation1, animation2) =>
+                    const accountPage(),
+                transitionDuration: const Duration(seconds: 0)));
+      });
+    }
 
     return Scaffold(
       body: Container(
@@ -85,7 +94,8 @@ class _loginPageState extends State<loginPage> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: ((context) => MapSample())));
+                                      builder: ((context) =>
+                                          const accountPage())));
                             }
                           });
                         }),
@@ -105,19 +115,5 @@ class _loginPageState extends State<loginPage> {
             ],
           )),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (FirebaseAuth.instance.currentUser != null) {
-        Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) => MapSample(),
-                transitionDuration: const Duration(seconds: 0)));
-      }
-    });
   }
 }
