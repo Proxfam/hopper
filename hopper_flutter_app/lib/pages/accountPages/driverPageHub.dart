@@ -8,6 +8,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hopper_flutter_app/pages/accountPages/driverSettings.dart';
+import 'package:hopper_flutter_app/pages/mainPages/driverPage.dart';
 
 import '../identityAuth.dart';
 
@@ -30,7 +31,7 @@ class _driverPageHubState extends State<driverPageHub> {
 
     List<Widget> pages = [
       identityAuth(),
-      driverSettings(),
+      driverPage(),
       Scaffold(
           appBar: AppBar(
             title: Text("Driver settings",
@@ -41,14 +42,6 @@ class _driverPageHubState extends State<driverPageHub> {
           ),
           body: const Center(child: Text("Identity Verification pending")))
     ];
-
-    Future<Map<String, dynamic>?> getData() async {
-      var query = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser?.uid.toString())
-          .get();
-      return query.data();
-    }
 
     return StreamBuilder<QuerySnapshot>(
         builder: (context, snapshot) {

@@ -36,11 +36,13 @@ class _accountSettingsState extends State<accountSettings> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: const [
+                        children: [
                           listitem(
-                              icon: Icon(Icons.person, size: 30),
+                              icon: const Icon(Icons.person, size: 30),
                               text: "Profile infomation",
-                              linkedPage: profileInfomation())
+                              callback: () {
+                                print('yolo');
+                              })
                         ])))));
   }
 }

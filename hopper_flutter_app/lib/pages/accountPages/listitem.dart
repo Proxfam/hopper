@@ -4,12 +4,12 @@ import 'package:flutter/src/widgets/framework.dart';
 
 class listitem extends StatefulWidget {
   const listitem(
-      {Key? key, required this.icon, required this.text, this.linkedPage})
+      {Key? key, required this.icon, required this.text, this.callback})
       : super(key: key);
 
   final Icon icon;
   final String text;
-  final linkedPage;
+  final callback;
 
   @override
   State<listitem> createState() => _listitemState();
@@ -24,10 +24,7 @@ class _listitemState extends State<listitem> {
             style: ButtonStyle(
                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                     const EdgeInsets.symmetric(vertical: 10))),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => (widget.linkedPage)));
-            },
+            onPressed: widget.callback,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

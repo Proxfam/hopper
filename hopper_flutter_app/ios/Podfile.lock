@@ -776,6 +776,8 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
+  - package_info (0.0.1):
+    - Flutter
   - Passbase (2.13.3):
     - Microblink (= 5.16.0)
   - passbase_flutter (2.13.3):
@@ -817,6 +819,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - location (from `.symlinks/plugins/location/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
   - passbase_flutter (from `.symlinks/plugins/passbase_flutter/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
@@ -875,6 +878,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
   passbase_flutter:
     :path: ".symlinks/plugins/passbase_flutter/ios"
   permission_handler_apple:
@@ -917,6 +922,7 @@ SPEC CHECKSUMS:
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   Microblink: 9443ff3c708a97673e4999389626079e10a1bbc1
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   Passbase: 0a99aa0ff15364b6bb7b2bede91467074811d460
   passbase_flutter: db05186a20fa22bbaf7f92632e1eb345cb816f63
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce

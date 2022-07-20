@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hopper_flutter_app/pages/accountPages/accountPage.dart';
-import 'package:hopper_flutter_app/pages/createRide.dart';
 import 'package:hopper_flutter_app/pages/home/welcomePage.dart';
 import 'package:hopper_flutter_app/pages/login/loginPage.dart';
+import 'package:hopper_flutter_app/pages/mainPages/createRide.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
 import '../main.dart';
@@ -39,14 +39,6 @@ class menuDraw extends StatelessWidget {
                 'Hopper',
                 style: drawTitle,
               )),
-          ListTile(
-            leading: const Icon(Icons.add, color: Colors.blue),
-            title: const Text('Create ride'),
-            onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const createRide()));
-            },
-          ),
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),

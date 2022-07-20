@@ -1,5 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:bottom_picker/bottom_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -34,12 +37,20 @@ class rideSearcher extends StatelessWidget {
             child: Column(children: [
               TextField(
                   controller: originController,
-                  decoration: const InputDecoration(
-                      icon: Icon(
+                  decoration: InputDecoration(
+                      icon: const Icon(
                         Icons.my_location_rounded,
                         size: 25,
                       ),
-                      labelText: "Origin")),
+                      labelText: "Origin",
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            BottomPicker.dateTime(
+                                    title: "Choose departure time",
+                                    minDateTime: DateTime.now())
+                                .show(context);
+                          },
+                          icon: const Icon(Icons.edit_calendar_rounded)))),
               TextField(
                   controller: destinationController,
                   decoration: InputDecoration(
@@ -314,5 +325,68 @@ class _rideResultState extends State<rideResult> {
                       ])));
         }),
         future: pfp);
+  }
+}
+
+class enrolledRide extends StatefulWidget {
+  const enrolledRide({Key? key, this.index, this.content}) : super(key: key);
+  final index;
+  final content;
+
+  @override
+  State<enrolledRide> createState() => _enrolledRideState();
+}
+
+class _enrolledRideState extends State<enrolledRide> {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        builder: (context, passengersSnapshot) {
+          if (passengersSnapshot.hasData) {
+            for (var element in passengersSnapshot.data!.docs) {
+              if (element.id == FirebaseAuth.instance.currentUser?.uid) {
+                print(widget.content.data?.docs[widget.index].data());
+                return Card(
+                    child: Column(children: [
+                  SizedBox(
+                      child: FutureBuilder<QuerySnapshot>(
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Column(children: [
+                                const SizedBox(
+                                    height: 200,
+                                    child: GoogleMap(
+                                        myLocationButtonEnabled: false,
+                                        rotateGesturesEnabled: false,
+                                        scrollGesturesEnabled: false,
+                                        zoomControlsEnabled: false,
+                                        zoomGesturesEnabled: false,
+                                        initialCameraPosition: CameraPosition(
+                                          target: LatLng(-45.00202331256251,
+                                              168.75192027169524),
+                                          zoom: 11.0,
+                                        ))),
+                                Row(
+                                  children: const [Text("Hello")],
+                                )
+                              ]);
+                            }
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          },
+                          future: FirebaseFirestore.instance
+                              .collection('rides')
+                              .get()))
+                ]));
+              }
+            }
+          }
+          return const SizedBox.shrink();
+        },
+        stream: FirebaseFirestore.instance
+            .collection('rides')
+            .doc(widget.content.data?.docs[widget.index].id)
+            .collection('passengers')
+            .snapshots());
   }
 }

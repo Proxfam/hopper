@@ -79,23 +79,24 @@ class _accountPageState extends State<accountPage> {
                                           MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.stretch,
-                                      children: const [
+                                      children: [
                                         listitem(
-                                            icon:
-                                                Icon(Icons.settings, size: 30),
-                                            text: "Account settings",
-                                            linkedPage: accountSettings()),
-                                        listitem(
-                                            icon: Icon(Icons.directions_car,
+                                            icon: const Icon(Icons.settings,
                                                 size: 30),
-                                            text: "Driver settings",
-                                            linkedPage: driverPageHub()),
+                                            text: "Account settings",
+                                            callback: () {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: ((context) =>
+                                                          const accountPage())));
+                                            }),
                                         listitem(
-                                            icon: Icon(
+                                            icon: const Icon(
                                                 Icons.access_time_rounded,
                                                 size: 30),
                                             text: "Past rides",
-                                            linkedPage: null)
+                                            callback: () {})
                                       ]))))
                     ],
                   )));
