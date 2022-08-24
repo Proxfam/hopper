@@ -7,7 +7,6 @@ import 'package:hopper_flutter_app/custom/loginAuth.dart';
 import 'package:hopper_flutter_app/pages/accountPages/accountPage.dart';
 import 'package:hopper_flutter_app/pages/login/createAccountPage.dart';
 import 'package:hopper_flutter_app/pages/menuDraw.dart';
-import 'package:hopper_flutter_app/pages/testingPage4.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 
 class loginPage extends StatefulWidget {

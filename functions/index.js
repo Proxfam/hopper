@@ -12,11 +12,12 @@ const port = 3000;
 
 const {PassbaseClient, PassbaseConfiguration} = require("@passbase/node");
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
+const { getFirestore, Timestamp, FieldValue, GeoPoint, DocumentSnapshot } = require('firebase-admin/firestore');
 const { extractInstanceAndPath } = require('firebase-functions/v1/database');
 const { json } = require('express');
 const { binaryauthorization } = require('googleapis/build/src/apis/binaryauthorization');
 const { DocumentBuilder } = require('firebase-functions/v1/firestore');
+const { _onRequestWithOptions } = require('firebase-functions/v1/https');
 
 const passbase = new PassbaseClient(new PassbaseConfiguration({
     apiKey: "uhtIdDNbX3lyKxN7JX86LTlZPh85BtaHMKkZweSkfgO856SFAYfdUlEdGT6MwYCqYxU9XuRFf3qEER9aJhhwFSu9PJvVCngmYsWNnnAkPXvE5EsA8bRWSrZYuRm5wz4w"
@@ -122,15 +123,33 @@ exports.webhooks = async (req,res) => {
 
 exports.searchRides = async (req, res) => {
     var riderOrigin = await maps.textSearch({params: {
+        region: 'nz',
         query: req.body['origin'],
         key: GOOGLE_API_KEY
     }})
+
     var riderDestination = await maps.textSearch({params: {
+        region: 'nz',
         query: req.body['destination'],
         key: GOOGLE_API_KEY
     }})
+
     var originRadius = req.body['originRadius'];
     var destinationRadius = req.body['destinationRadius'];
+    var riderDepartureTime = new Date(req.body['departureTime']);
+    var riderArrivalTime = new Date(req.body['arrivalTime']);
+
+    if (req.body['departureTime'] != undefined && req.body['arrivalTime'] != undefined) {
+        res.json({
+            error: "Departure and arrival times cannot be specified at the same time"
+        })
+    }
+
+    if (req.body['departureTime'] == undefined && req.body['arrivalTime'] == undefined) {
+        res.json({
+            error: "No departure or arrival time specified"
+        })
+    }
 
     var rides = await db.collection('rides').get();
 
@@ -144,28 +163,37 @@ exports.searchRides = async (req, res) => {
 
     var validRides = [];
 
-    for (currentRide in rides.docs) {
-        var coords = await db.collection(`rides/${rides.docs[currentRide].id}/coords`).get();
+    for (i in rides.docs) {
 
-        var pickup = {distance: 99999, coord: undefined};
-        var dropoff = {distance: 99999, coord: undefined};
+        //console.log(rides.docs[i].data()['coords'][5]['latitude']);
 
-        for (currentCoord in coords.docs) {
+        //check on same day
 
-            //console.log(JSON.stringify(coords.docs[currentCoord].data()['lat']));
+        // console.log(new Date(rides.docs[i].data()['departureTime']).getDate() != riderDepartureTime.getDate() && req.body['departureTime'] != undefined && rides.docs[i].data()['departureTime'] != null);
+        // console.log(new Date(rides.docs[i].data()['departureTime']).getDate() != riderArrivalTime.getDate() && req.body['arrivalTime'] != undefined && rides.docs[i].data()['departureTime'] != null);
+        // console.log(new Date(rides.docs[i].data()['arrivalTime']).getDate() != riderDepartureTime.getDate() && req.body['departureTime'] != undefined && rides.docs[i].data()['arrivalTime'] != null);
+        // console.log(new Date(rides.docs[i].data()['arrivalTime']).getDate() != riderArrivalTime.getDate() && req.body['arrivalTime'] != undefined && rides.docs[i].data()['arrivalTime'] != null);
 
-            //console.log(JSON.stringify(riderOrigin.data));
+        if ((new Date(rides.docs[i].data()['departureTime']).getDate() != riderDepartureTime.getDate() && req.body['departureTime'] != undefined && rides.docs[i].data()['departureTime'] != null) || (new Date(rides.docs[i].data()['departureTime']).getDate() != riderArrivalTime.getDate() && req.body['arrivalTime'] != undefined && rides.docs[i].data()['departureTime'] != null) || (new Date(rides.docs[i].data()['arrivalTime']).getDate() != riderDepartureTime.getDate() && req.body['departureTime'] != undefined && rides.docs[i].data()['arrivalTime'] != null) || (new Date(rides.docs[i].data()['arrivalTime']).getDate() != riderArrivalTime.getDate() && req.body['arrivalTime'] != undefined && rides.docs[i].data()['arrivalTime'] != null)) {
+            console.log("left here");
+            continue;
+        }
+
+        var pickup = {distance: 99999, coord: undefined, address: undefined};
+        var dropoff = {distance: 99999, coord: undefined, address: undefined};
+
+        for (x in rides.docs[i].data()['coords']) {
 
             //calculate distance
             var distance = _calculateDistance(
                 riderOrigin.data.results[0].geometry.location['lat'],
                 riderOrigin.data.results[0].geometry.location['lng'],
-                coords.docs[currentCoord].data()['lat'],
-                coords.docs[currentCoord].data()['lng']);
+                rides.docs[i].data()['coords'][x]['latitude'],
+                rides.docs[i].data()['coords'][x]['longitude']);
 
             if (pickup.distance > distance && originRadius >= distance) {
                 pickup.distance = distance;
-                pickup.coord = coords.docs[currentCoord];
+                pickup.coord = new GeoPoint(rides.docs[i].data()['coords'][x]['_latitude'], rides.docs[i].data()['coords'][x]['_longitude']);
             }
 
             //console.log(riderDestination.data.results[0].geometry.location);
@@ -173,41 +201,199 @@ exports.searchRides = async (req, res) => {
             var distance = _calculateDistance(
                 riderDestination.data.results[0].geometry.location['lat'],
                 riderDestination.data.results[0].geometry.location['lng'],
-                coords.docs[currentCoord].data()['lat'],
-                coords.docs[currentCoord].data()['lng']);
+                rides.docs[i].data()['coords'][x]['latitude'],
+                rides.docs[i].data()['coords'][x]['longitude']);
 
             if (dropoff.distance > distance && destinationRadius >= distance) {
                 dropoff.distance = distance;
-                dropoff.coord = coords.docs[currentCoord];
+                dropoff.coord = new GeoPoint(rides.docs[i].data()['coords'][x]['_latitude'], rides.docs[i].data()['coords'][x]['_longitude']);
             }
         }
 
+        // rides.docs[i].data()['coords'].forEach((coord) => {
+        //     console.log(coord);
+        // })
+
         if (pickup.distance != 99999 && dropoff.distance != 99999) {
-            var sortedCoords = [];
-            for (coord in coords.docs) {
-                if (Number.parseInt(coords.docs[coord].id) <= Number.parseInt(dropoff.coord.id) && Number.parseInt(coords.docs[coord].id) >= Number.parseInt(pickup.coord.id)) {
-                    console.log(coords.docs[coord].id);
-                    sortedCoords.push(coords.docs[coord]);
+
+            //console.log(riderOrigin.data.results[0].formatted_address);
+
+            //Departure/Arrival Times - START
+
+            if (req.body['departureTime'] != undefined) {
+
+                var riderPickupRoute = await maps.directions({params: {
+                    origin: riderOrigin.data.results[0].formatted_address,
+                    destination: pickup.coord,
+                    key: GOOGLE_API_KEY
+                }})
+    
+                var driverPickupRoute = await maps.directions({params: {
+                    origin: rides.docs[i].data()['coords'][0],
+                    destination: pickup.coord,
+                    key: GOOGLE_API_KEY
+                }})
+
+                var riderDropoffRoute = await maps.directions({params: {
+                    origin: riderDestination.data.results[0].formatted_address,
+                    destination: dropoff.coord,
+                    key: GOOGLE_API_KEY
+                }})
+
+                var driverDropoffRoute = await maps.directions({params: {
+                    origin: rides.docs[i].data()['coords'][0],
+                    destination: dropoff.coord,
+                    key: GOOGLE_API_KEY
+                }})
+
+                // if driverDepartureTimePlusDrivingTimeMinusRiderWalkingTime is greater than riderDepartureTime, then rider can make it
+                // if riderDepartureTimePlusWalkingTime is less than driverDepartureTimePlusDrivingTime, then rider will make it
+                // if riderDepartureTimePlusWalkingTimePlusHour is greater than driverDepartureTimePlusDrivingTime, then rider can make it
+
+                var riderDepartureTimePlusWalkingTime = new Date(riderDepartureTime.getTime() + (riderPickupRoute.data.routes[0].legs[0].duration.value / 60 * 60000));
+                var driverDepartureTimePlusDrivingTime = new Date(new Date(rides.docs[i].data()['departureTime']).getTime() + (driverPickupRoute.data.routes[0].legs[0].duration.value / 60 * 60000));
+                var riderDepartureTimePlusWalkingTimePlusHour = new Date(riderDepartureTimePlusWalkingTime.getTime() + 60 * 60 * 1000);
+                var driverDepartureTimePlusDrivingTimeMinusRiderWalkingTime = new Date(driverDepartureTimePlusDrivingTime.getTime() - (riderPickupRoute.data.routes[0].legs[0].duration.value / 60 * 60000));
+
+                var dropoffArrival = new Date(new Date(rides.docs[i].data()['departureTime']).getTime() + (driverDropoffRoute.data.routes[0].legs[0].duration.value / 60 * 60000));
+                var destinationArrival = new Date(dropoffArrival.getTime() + (riderDropoffRoute.data.routes[0].legs[0].duration.value / 60 * 60000));
+
+                var leaveBy = new Date(driverDepartureTimePlusDrivingTime.getTime() - (riderPickupRoute.data.routes[0].legs[0].duration.value / 60 * 60000)).toISOString();
+                var hopOn = driverDepartureTimePlusDrivingTime.toISOString();
+                var hopOff = dropoffArrival.toISOString();
+                var arriveBy = destinationArrival.toISOString();
+
+                if (driverDepartureTimePlusDrivingTimeMinusRiderWalkingTime < riderDepartureTime || riderDepartureTimePlusWalkingTime > driverDepartureTimePlusDrivingTime || riderDepartureTimePlusWalkingTimePlusHour < driverDepartureTimePlusDrivingTime) {
+                    console.log("you won't make it")
+                    continue;
+                }
+
+           } else if (req.body['arrivalTime'] != undefined) {
+
+                var riderPickupRoute = await maps.directions({params: {
+                    origin: riderOrigin.data.results[0].formatted_address,
+                    destination: pickup.coord,
+                    key: GOOGLE_API_KEY
+                }})
+
+                var driverPickupRoute = await maps.directions({params: {
+                    origin: rides.docs[i].data()['coords'][0],
+                    destination: pickup.coord,
+                    key: GOOGLE_API_KEY
+                }})
+
+                var riderDropoffRoute = await maps.directions({params: {
+                    origin: riderDestination.data.results[0].formatted_address,
+                    destination: dropoff.coord,
+                    key: GOOGLE_API_KEY
+                }})
+
+                var driverDropoffRoute = await maps.directions({params: {
+                    origin: rides.docs[i].data()['coords'][0],
+                    destination: dropoff.coord,
+                    key: GOOGLE_API_KEY
+                }})
+
+                var dropoffArrival = new Date(new Date(rides.docs[i].data()['departureTime']).getTime() + (driverDropoffRoute.data.routes[0].legs[0].duration.value / 60 * 60000));
+                var destinationArrival = new Date(dropoffArrival.getTime() + (riderDropoffRoute.data.routes[0].legs[0].duration.value / 60 * 60000));
+                var destinationArrivalMinusHour = new Date(destinationArrival.getTime() - 60 * 60 * 1000);
+
+                if (destinationArrival > riderArrivalTime || destinationArrivalMinusHour > destinationArrival) {
+                    console.log("you won't make it")
+                    continue;
+                }
+
+                var driverDepartureTimePlusDrivingTime = new Date(new Date(rides.docs[i].data()['departureTime']).getTime() + (driverPickupRoute.data.routes[0].legs[0].duration.value / 60 * 60000));
+
+                var leaveBy = new Date(driverDepartureTimePlusDrivingTime.getTime() - (riderPickupRoute.data.routes[0].legs[0].duration.value / 60 * 60000)).toISOString();
+                var hopOn = driverDepartureTimePlusDrivingTime.toISOString();
+                var hopOff = dropoffArrival.toISOString();
+                var arriveBy = destinationArrival.toISOString();
+
+           }
+
+            //Departure/Arrival Times - END
+
+            var sortedCoords = rides.docs[i].data()['coords'].slice(rides.docs[i].data()['coords'].findIndex(coord => coord.latitude == pickup.coord.latitude && coord.longitude == pickup.coord.longitude), rides.docs[i].data()['coords'].findIndex(coord => coord.latitude == dropoff.coord.latitude && coord.longitude == dropoff.coord.longitude));
+
+            var cost = 0;
+            var inCar = false;
+
+            for (var y in rides.docs[i].data()['passengers']) {
+                new GeoPoint(rides.docs[i].data()['passengers'][y]['locations']['pickup']['coord']["_latitude"],rides.docs[i].data()['passengers'][y]['locations']['pickup']['coord']['_longitude']);
+            }
+
+            var driver = await (await db.collection('users').doc(rides.docs[i].data()['driver']).get()).data();
+            var passengers = 2;
+            
+            for (x in rides.docs[i].data()['coords']) {
+
+                var geopointCoord = new GeoPoint(rides.docs[i].data()['coords'][x]['_latitude'], rides.docs[i].data()['coords'][x]['_longitude']);
+
+                if ((geopointCoord.latitude == pickup.coord.latitude && geopointCoord.longitude == pickup.coord.longitude) || inCar) {
+                    inCar = true;
+
+                    for (var y in rides.docs[i].data()['passengers']) {
+
+                        var passengerPickup = new GeoPoint(rides.docs[i].data()['passengers'][y]['locations']['pickup']['coord']["_latitude"],rides.docs[i].data()['passengers'][y]['locations']['pickup']['coord']['_longitude']);
+                        var passengerDropoff = new GeoPoint(rides.docs[i].data()['passengers'][y]['locations']['dropoff']['coord']["_latitude"],rides.docs[i].data()['passengers'][y]['locations']['dropoff']['coord']['_longitude']);
+
+                        //add passenger if they are in the same coord segment
+                        if (passengerPickup.latitude == geopointCoord.latitude && passengerPickup.longitude == geopointCoord.longitude) {
+                            passengers += 1;
+                        } else if (passengerDropoff.latitude == geopointCoord.latitude && passengerDropoff.longitude == geopointCoord.longitude) {
+                            passengers -= 1;
+                        }
+                    }
+
+                    try{
+                        cost += (_calculateDistance(rides.docs[i].data()['coords'][parseInt(x)]['latitude'], rides.docs[i].data()['coords'][parseInt(x)]['longitude'], rides.docs[i].data()['coords'][parseInt(x)+1]['latitude'], rides.docs[i].data()['coords'][parseInt(x)+1]['longitude']) * ((driver['driverInfo']['litresPer100km']/100) * 3.34)) / passengers;
+                    } catch (e) {
+                        console.log("End of cost calc");
+                    }
                 }
             }
-            //var slicedCoords = mappedCoords.slice(mappedCoords.findIndex(element => element.lat == pickup.coord.lat && element.lng == pickup.coord.lng), mappedCoords.findIndex(element => element.lat == dropoff.coord.lat && element.lng == dropoff.coord.lng) + 1);
-            
-            var distanceReponse = await maps.distancematrix({params: {
-                origins: [pickup.coord.data()],
-                destinations: [dropoff.coord.data()],
-                key: GOOGLE_API_KEY
-            }});
 
-            console.log(sortedCoords.length);
+            var serviceFee = Math.round((0.6 * cost) * 100) / 100
+
+            var driverCost = Math.round(cost * 100) / 100;
+
+            await maps.textSearch({params: {
+                query: pickup.coord.latitude + "," + pickup.coord.longitude,
+                key: GOOGLE_API_KEY
+            }}).then(async function (result) {
+                pickup.address = result.data.results[0].formatted_address.split(',')[0];
+            });
+    
+            await maps.textSearch({params: {
+                type: 'address',
+                query: dropoff.coord.latitude + "," + dropoff.coord.longitude,
+                key: GOOGLE_API_KEY,
+            }}).then(async function (result) {
+                dropoff.address = result.data.results[0].formatted_address.split(',')[0];
+            });
 
             validRides.push({
-                riderDistance: distanceReponse.data.rows[0].elements[0].distance.value,
-                ride: rides.docs[currentRide].data(),
-                rideCoords: sortedCoords.sort(),
-                driver: (await db.collection('drivers').doc(rides.docs[currentRide].data().driver).get()).data(),
-                driverDetails: (await db.collection('users').doc(rides.docs[currentRide].data().driver).get()).data(),
-                pickup: pickup,
-                dropoff: dropoff
+                locations: {
+                    origin: riderOrigin.data.results[0].name,
+                    destination: riderDestination.data.results[0].name,
+                    pickup: pickup,
+                    dropoff: dropoff
+                },
+                times: {
+                    leaveBy: leaveBy.toString(),
+                    hopOn: hopOn.toString(),
+                    hopOff: hopOff.toString(),
+                    arriveBy: arriveBy.toString()
+                },
+                payment: {
+                    serviceFee: serviceFee,
+                    driverCost: driverCost
+                },
+                rideID: rides.docs[i].id,
+                ride: rides.docs[i].data(),
+                sortedCoords: sortedCoords,
+                driver: (await db.collection('users').doc(rides.docs[i].data().driver).get()).data(),
             });
         }
     }
@@ -289,44 +475,44 @@ exports.addRiderToRide = async (req, res) => {
     res.status(200).send();
 };
 
-exports.addRide = async (req,res) => {
-    await db.collection("rides").doc('testerThing1').set({
-        'driver': '3n6ChQAe7qe25nl5Ju0zFiv6UWg1',
-        'distance': 'null',
-        'origin': [
-            -44.94890818301905, 168.84461612633123
-        ],
-        'destination': [
-            -45.023243016958574, 168.73555828858196
-        ],
-        'stops': []
+exports.createRide = async (req,res) => {
+    var docRef = await db.collection("rides").add({
+        'driver': req.body['driver'],
+        'origin': req.body['origin'],
+        'destination': req.body['destination'],
+        'departureTime': req.body['departureTime'] ?? null,
+        'arrivalTime': req.body['arrivalTime'] ?? null,
     })
 
     var coords = await maps.directions({
         params: {
-            origin: {'lat':-44.94890818301905, 'lng':168.84461612633123},
-            destination: {'lat': -45.023243016958574, 'lng': 168.73555828858196},
+            origin: req.body['origin'],
+            destination: req.body['destination'],
             key: GOOGLE_API_KEY
         }
     })
 
+    console.log(coords.data)
+
     let points = polyline.decode(coords.data.routes[0].overview_polyline.points);
-    var doc = "1";
-    for(point in points) {
-        db.collection('rides/testerThing1/coords').doc(doc).set({
-            'lat': points[point][0],
-            'lng': points[point][1]
-        })
-        var docNum = parseInt(doc);
-        doc = (docNum += 1).toString();
-    }
+    await db.collection(`rides`).doc(docRef.id).update({
+        'coords': points.map(point => new GeoPoint(point[0],point[1])),
+    }).then(() => {console.log('done')})
 
     res.send();
 };
 
+exports.archiveRide = async (req,res) => {
+    var rideData = await (await db.collection(`rides`).doc(req.body['rideID']).get()).data();
+    //await db.collection(`rides`).doc(req.body['rideID']).delete();
+    await db.collection(`archivedRides`).doc(req.body['rideID']).set(rideData);
+    res.send('i got you');
+}
+
 //exports.testPassbase = functions.https.onRequest(this.testPassbase);
 exports.stripePayment = functions.https.onRequest(this.stripePayment);
 exports.webhooks = functions.https.onRequest(this.webhooks);
-exports.addRide = functions.https.onRequest(this.addRide);
+exports.createRide = functions.https.onRequest(this.createRide);
 exports.addRiderToRide = functions.https.onRequest(this.addRiderToRide);
 exports.searchRides = functions.https.onRequest(this.searchRides);
+exports.archiveRide = functions.https.onRequest(this.archiveRide);

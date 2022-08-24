@@ -35,7 +35,7 @@ class _driverPageState extends State<driverPage> {
                                 color: Colors.blue, size: 30),
                             text: "Create ride",
                             callback: () {
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) =>

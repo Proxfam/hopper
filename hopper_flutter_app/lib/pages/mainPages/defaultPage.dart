@@ -11,6 +11,7 @@ import 'package:hopper_flutter_app/pages/accountPages/driverPageHub.dart';
 import 'package:hopper_flutter_app/pages/mainPages/driverPage.dart';
 import 'package:hopper_flutter_app/pages/mainPages/ridesPage.dart';
 import 'package:hopper_flutter_app/pages/menuDraw.dart';
+import 'package:hopper_flutter_app/utils/contants.dart';
 import 'package:location/location.dart';
 
 import 'dart:math' as math;
@@ -43,16 +44,26 @@ class _defaultPageState extends State<defaultPage> {
     // TextEditingController destinationController = TextEditingController();
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: NIGHTMODE ? Colors.grey.shade900 : null,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          foregroundColor: Colors.grey.shade400,
+          // foregroundColor: Colors.grey.shade400,
+          foregroundColor: [
+            Colors.grey,
+            Colors.white,
+            Colors.grey
+          ][selectedIndex],
           shadowColor: Colors.transparent,
         ),
         extendBodyBehindAppBar: true,
         drawer: menuDraw(),
         bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: NIGHTMODE ? Colors.white.withAlpha(255) : null,
+          unselectedItemColor: NIGHTMODE ? Colors.white.withAlpha(150) : null,
+          backgroundColor: NIGHTMODE ? Colors.grey.shade900 : null,
           currentIndex: selectedIndex,
-          items: const [
+          items: [
             BottomNavigationBarItem(
                 icon: Icon(Icons.directions_car), label: "Drive"),
             BottomNavigationBarItem(icon: Icon(Icons.map), label: "Map"),

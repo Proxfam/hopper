@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+const GOOGLE_API_KEY = "AIzaSyArRqDMu_RbWCN6PxHpfrZzGvN9D2wABfs";
+
+var NIGHTMODE = false;
+
 const PRIMARY_COLOR = Color.fromRGBO(48, 47, 48, 1.0);
 const COLOR_GREY = Color.fromRGBO(141, 141, 141, 1.0);
 

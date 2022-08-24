@@ -68,15 +68,15 @@ class _welcomePageState extends State<welcomePage> {
                     Colors.blue,
                   ],
                 ))),
-                Positioned(
-                    bottom: 200,
-                    right: 0,
-                    left: 0,
-                    child: TextButton(
-                        child: const Text("reset"),
-                        onPressed: () {
-                          data.setBool('firstOpen', false);
-                        })),
+                // Positioned(
+                //     bottom: 200,
+                //     right: 0,
+                //     left: 0,
+                //     child: TextButton(
+                //         child: const Text("reset"),
+                //         onPressed: () {
+                //           data.setBool('firstOpen', false);
+                //         })),
                 AnimatedPositioned(
                     top: 0,
                     left: 0,
@@ -95,9 +95,6 @@ class _welcomePageState extends State<welcomePage> {
                       totalRepeatCount: 1,
                       animatedTexts: <AnimatedText>[
                         RotateAnimatedText('Kia ora!',
-                            textStyle: themeData.textTheme.headlineLarge,
-                            duration: const Duration(milliseconds: 2000)),
-                        RotateAnimatedText('Welcome to Hopper',
                             textStyle: themeData.textTheme.headlineLarge,
                             duration: const Duration(milliseconds: 2000)),
                       ],
@@ -119,7 +116,7 @@ class _welcomePageState extends State<welcomePage> {
                                   Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 10),
-                                      child: (Text("Hopper",
+                                      child: (Text("EnviroLink",
                                           style: themeData
                                               .textTheme.headlineLarge))),
                                   Padding(
@@ -258,7 +255,7 @@ class _welcomePageState extends State<welcomePage> {
                                   Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 10),
-                                      child: (Text("Hopper",
+                                      child: (Text("EnviroLink",
                                           style: themeData
                                               .textTheme.headlineLarge))),
                                   Padding(

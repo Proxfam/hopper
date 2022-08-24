@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter_stripe/flutter_stripe.dart';
 
-Future<void> initPaymentSheet(context,
+Future<dynamic> initPaymentSheet(context,
     {required double amount,
     required Function success,
     required Function(Object) error}) async {
@@ -37,7 +37,7 @@ Future<void> initPaymentSheet(context,
 
     await Stripe.instance.presentPaymentSheet();
 
-    success();
+    success(response.body);
   } catch (e) {
     error(e);
   }

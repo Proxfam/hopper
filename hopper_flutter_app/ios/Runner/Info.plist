@@ -9,6 +9,14 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Hopper needs access to location when in use</string>
 
+	<key>HERECredentials</key>
+	<dict>
+		<key>AccessKeyId</key>
+			<string>DzZOlQ-g-uH2EmTtR-zUXA</string>
+		<key>AccessKeySecret</key>
+			<string>obj8AQtWsT65pb1DfS4RAlR88BtURDWYY7MR-AZs2ZcR8WiGfQmqTpVkS1syJ8jixt3z0wgTPFXSY7OyNa0BEw</string>
+	</dict>
+
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

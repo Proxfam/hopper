@@ -11,7 +11,6 @@ import 'package:hopper_flutter_app/pages/accountPages/accountSettings.dart';
 import 'package:hopper_flutter_app/pages/home/welcomePage.dart';
 import 'package:hopper_flutter_app/pages/identityAuth.dart';
 import 'package:hopper_flutter_app/pages/login/loginPage.dart';
-import 'package:hopper_flutter_app/pages/testingPage5.dart';
 import 'package:hopper_flutter_app/pages/testingPage6.dart';
 import 'package:hopper_flutter_app/utils/contants.dart';
 import 'package:passbase_flutter/passbase_flutter.dart';
@@ -25,6 +24,7 @@ Future<void> main() async {
           "O8vmEcyTIdE64fc5PxCFvPX1UB46UXWhFlVLizREkUdAXuHZNfAGs26AtgdRjwPL");
   Stripe.publishableKey =
       "pk_test_51LFA2lJj1tNJdnFypx1Np4KpST982pUFPA9OlmFsbAuQTgrZYxa4IBLlPR71KYcem9FyjQdWx7rQSNpTCFUGc5nv00s22o35tQ";
+  //initializeHERESDK();
   runApp(const mainPage());
 }
 
@@ -45,6 +45,6 @@ class mainPage extends StatelessWidget {
           fontFamily: "Montserrat",
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: const welcomePage());
+        home: welcomePage());
   }
 }

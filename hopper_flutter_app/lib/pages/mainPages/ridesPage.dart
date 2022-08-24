@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hopper_flutter_app/custom/stripe.dart';
 import 'package:hopper_flutter_app/pages/mainPages/mapWidgets.dart';
+import 'package:hopper_flutter_app/utils/contants.dart';
 
 class ridesPage extends StatefulWidget {
   const ridesPage({Key? key}) : super(key: key);
@@ -15,55 +16,151 @@ class ridesPage extends StatefulWidget {
 }
 
 class _ridesPageState extends State<ridesPage> {
-  // Container(
-  //       padding: EdgeInsets.symmetric(horizontal: 20),
-  //       alignment: Alignment.topCenter,
-  //       child: ListView(
-  //         scrollDirection: Axis.vertical,
-  //         children: [
-  //           rideResult(data: data)
-  //           const Card(child: Text("wait a minute")),
-  //           const Card(child: Text("what the fuck is going on")),
-  //           const Card(child: Text("what the fuck is going on")),
-  //           Card(
-  //               child: TextButton(
-  //                   onPressed: () {
-  //                     initPaymentSheet(context,
-  //                         amount: 699, success: () {}, error: (e) {});
-  //                   },
-  //                   child: Text("Test me")))
-  //         ],
-  //       ));
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot>(
-        builder: ((context, rideSnapshot) {
-          if (rideSnapshot.hasData) {
-            var selectedRides = [];
-
-            return ListView.builder(
-                itemCount: rideSnapshot.data?.docs.length,
-                itemBuilder: (context, index) {
-                  return enrolledRide(content: rideSnapshot, index: index);
-                });
-
-            // return ListView(
-            //     children: snapshot.data?.docs.map((e) async {
-            //   return StreamBuilder<QuerySnapshot>(
-            //       builder: (context, snapshot) {
-            //         if (snapshot.hasData) {}
-            //         return SizedBox.shrink();
-            //       },
-            //       stream: FirebaseFirestore.instance
-            //           .collection('rides')
-            //           .doc(e.id)
-            //           .collection('passengers')
-            //           .snapshots());
-            // }).toList() as List<Widget>);
-          }
-          return const SizedBox.shrink();
-        }),
-        future: FirebaseFirestore.instance.collection('rides').get());
+    return ListView(children: [
+      StreamBuilder<QuerySnapshot>(
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active &&
+                snapshot.hasData) {
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Upcoming rides',
+                                  style: TextStyle(
+                                      fontSize: 31,
+                                      fontWeight: FontWeight.bold,
+                                      color: NIGHTMODE ? Colors.white : null)),
+                              Row(children: const [
+                                Text("See all",
+                                    style: TextStyle(color: Colors.blue)),
+                                Icon(Icons.arrow_forward, color: Colors.blue)
+                              ])
+                            ])),
+                    Column(
+                        children: snapshot.data!.docs.map((e) {
+                      try {
+                        for (var passenger in (e.data()
+                            as Map<String, dynamic>)['passengers']) {
+                          if (passenger['uid'] ==
+                              FirebaseAuth.instance.currentUser!.uid) {
+                            return enrolledRide(data: {
+                              'rideData': e.data(),
+                              'passengerData': passenger
+                            });
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        }
+                      } catch (e) {
+                        print("no passengers");
+                      }
+                      return const SizedBox.shrink();
+                    }).toList())
+                  ]);
+            } else {
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Upcoming rides',
+                                  style: TextStyle(
+                                      fontSize: 31,
+                                      fontWeight: FontWeight.bold,
+                                      color: NIGHTMODE ? Colors.white : null)),
+                              Row(children: const [
+                                Text("See all",
+                                    style: TextStyle(color: Colors.blue)),
+                                Icon(Icons.arrow_forward, color: Colors.blue)
+                              ])
+                            ]))
+                  ]);
+            }
+          },
+          stream: FirebaseFirestore.instance.collection('rides').snapshots()),
+      StreamBuilder<QuerySnapshot>(
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active &&
+                snapshot.hasData) {
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Past rides',
+                                  style: TextStyle(
+                                      fontSize: 31,
+                                      fontWeight: FontWeight.bold,
+                                      color: NIGHTMODE ? Colors.white : null)),
+                              Row(children: const [
+                                Text("See all",
+                                    style: TextStyle(color: Colors.blue)),
+                                Icon(Icons.arrow_forward, color: Colors.blue)
+                              ])
+                            ])),
+                    Column(
+                        children: snapshot.data!.docs.map((e) {
+                      try {
+                        for (var passenger in (e.data()
+                            as Map<String, dynamic>)['passengers']) {
+                          if (passenger['uid'] ==
+                              FirebaseAuth.instance.currentUser!.uid) {
+                            return enrolledRide(data: {
+                              'rideData': e.data(),
+                              'passengerData': passenger
+                            });
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        }
+                      } catch (e) {
+                        print("no passengers");
+                      }
+                      return const SizedBox.shrink();
+                    }).toList())
+                  ]);
+            } else {
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Upcoming rides',
+                                  style: TextStyle(
+                                      fontSize: 31,
+                                      fontWeight: FontWeight.bold,
+                                      color: NIGHTMODE ? Colors.white : null)),
+                              Row(children: const [
+                                Text("See all",
+                                    style: TextStyle(color: Colors.blue)),
+                                Icon(Icons.arrow_forward, color: Colors.blue)
+                              ])
+                            ]))
+                  ]);
+            }
+          },
+          stream: FirebaseFirestore.instance
+              .collection('archivedRides')
+              .snapshots())
+    ]);
   }
 }

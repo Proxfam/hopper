@@ -36,7 +36,7 @@ class menuDraw extends StatelessWidget {
                 ],
               )),
               child: Text(
-                'Hopper',
+                'EnviroLink',
                 style: drawTitle,
               )),
           ListTile(
